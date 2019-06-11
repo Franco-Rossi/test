@@ -4,17 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>@yield('title', 'Test')</title>
 </head>
 <body>
-
-<ul>
+    
+    <ul>
         <li><a href="/">Home</a></li>
-    <li><a href="/contact">Contactanos</a></li>
-    <li><a href="/about">Sobre nosotros</a></li>
-</ul>
-
-@yield('content')
-
+        <li><a href="/contact">Contactanos</a></li>
+        <li><a href="/about">Sobre nosotros</a></li>
+    </ul>
+    
+    @yield('content')
+    
+    
 </body>
 </html>
