@@ -4,12 +4,19 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Project;
+use App\Mail\ProjectCreated;
 
 class ProjectsController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
-        $projects = Project::all();
+        $projects = Project::where('owner_id', auth()->id())->get();
         
         return view ('projects.index', compact('projects'));
     }
@@ -17,10 +24,16 @@ class ProjectsController extends Controller
     public function store()
     {
 
-        Project::create(request()->validate([
+        $project = Project::create(request()->validate([
             'title' => ['required', 'min:3', 'max:255'],
             'description' => ['required', 'min:6']
-        ]));
+        ]) + ['owner_id' => auth()->id()]);
+
+            \Mail::to('francorossipriv@gmail.com')->send(
+                new ProjectCreated($project)
+            );
+
+
         
         return redirect('/projects');
     }
@@ -32,6 +45,7 @@ class ProjectsController extends Controller
     
     public function show(Project $project)
     {
+        $this->authorize('update', $project);
         return view ('projects.show', compact('project'));
     }
     
